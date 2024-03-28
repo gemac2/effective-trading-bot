@@ -20,10 +20,13 @@ def search_ticks():
         return ticks
 
     for tick in list_ticks:
-        if tick['symbol'] ==  "BTCUSDT" or tick['symbol'] ==  "ETHUSDT":
-            ticks.append(tick['symbol'])
+        if tick['symbol'][-4:] != 'USDT':
+            continue
+        if tick['symbol'] ==  "USDCUSDT":
+            continue
+        ticks.append(tick['symbol'])
 
-    print('Analyzing BTC & ETH USDT Pair: #' + str(len(ticks)))
+    print('Number of currency found in the USDT Pair: #' + str(len(ticks)))
 
     return ticks
 
