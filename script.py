@@ -8,6 +8,7 @@ import requests
 bollinger_deviation_three = 3  #Third Deviation for Bollinger Bands
 telegram_bot_token = '6633256482:AAGD_stwsFrVqeK7oXyy5W3nZdlvSbBYqXg'
 telegram_chat_id = '1026595920'
+ideal_volumen = 50000000
 
 client = Client('', '', tld='com')
 
@@ -63,6 +64,10 @@ def get_bollinger_signals(tick, klines):
     df.set_index('timestamp', inplace=True)
     df['close'] = df['close'].astype(float)
 
+    rsi = RSIIndicator(df['close']).rsi().iloc[-1]
+    if rsi == 100:
+        return
+
     # Bollinger Bands
     bb = BollingerBands(df['close'], window=20, window_dev=bollinger_deviation_three)
     upper_band = bb.bollinger_hband()
@@ -73,15 +78,17 @@ def get_bollinger_signals(tick, klines):
     if close_price <= lower_band.iloc[-1]:
         info = get_info_ticks(tick)
         volumen = float(info['quoteVolume'])
-        send_telegram_message("⚠️ Third Bollinger Bands Broken", "Possible Long", tick, human_format(volumen), info['lastPrice'], info['highPrice'], info['lowPrice'], False)
-        return True
+        if  volumen >= ideal_volumen:
+            send_telegram_message("⚠️ Third Bollinger Bands Broken", "Possible Long", tick, human_format(volumen), info['lastPrice'], info['highPrice'], info['lowPrice'], False)
+            return True
 
     # SHORT signals
     elif close_price >= upper_band.iloc[-1]:
         info = get_info_ticks(tick)
         volumen = float(info['quoteVolume'])
-        send_telegram_message("⚠️ Third Bollinger Bands Broken", "Possible Short", tick, human_format(volumen), info['lastPrice'], info['highPrice'], info['lowPrice'], False)
-        return True
+        if  volumen >= ideal_volumen:
+            send_telegram_message("⚠️ Third Bollinger Bands Broken", "Possible Short", tick, human_format(volumen), info['lastPrice'], info['highPrice'], info['lowPrice'], False)
+            return True
     
     return False
 
