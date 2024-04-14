@@ -12,6 +12,10 @@ ideal_volumen = 50000000
 
 client = Client('', '', tld='com')
 
+def initialize():
+    global tickers_list
+    tickers_list = search_ticks()
+
 def search_ticks():
     ticks = []
     try:
@@ -111,21 +115,26 @@ def send_telegram_message(title, order_type, currency_name, volume, last_price, 
     except Exception as e:
         print("Error while we send message to Telegram:", e)
 
-while True:
-    ticks = search_ticks()
-    print('Scanning Currencies...')
-    print('')
-    for tick in ticks:
-        klines = get_klines(tick)
-        if klines is None:
-            continue
+def main_loop():
+    while True:
+        ticks = search_ticks()
+        print('Scanning Currencies...')
+        print('')
+        for tick in ticks:
+            klines = get_klines(tick)
+            if klines is None:
+                continue
 
-        found_signal_bollinger = get_bollinger_signals(tick, klines)
+            found_signal_bollinger = get_bollinger_signals(tick, klines)
 
-        if found_signal_bollinger:
-            print("Found signal for", tick)
-            print('**************************************************')
-            print('')
-    print('Waiting 30 seconds...')
-    print('')
-    time.sleep(30)
+            if found_signal_bollinger:
+                print("Found signal for", tick)
+                print('**************************************************')
+                print('')
+        print('Waiting 30 seconds...')
+        print('')
+        time.sleep(30)
+
+if __name__ == "__main__":
+    initialize()
+    main_loop()
