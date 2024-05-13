@@ -11,6 +11,7 @@ bollinger_deviation_three = 3  # Third Deviation for Bollinger Bands
 ideal_volume = 50000000
 last_signal_time = {}
 timeframe_wait_times = {
+    "5 Minutes": 300,
     "1 Hour": 3600,
     "4 Hours": 14400
 }
@@ -47,9 +48,9 @@ def search_ticks():
 def get_klines_five_minutes(tick):
     try:
         klines = client.futures_klines(symbol=tick, interval=Client.KLINE_INTERVAL_5MINUTE, limit=48, timeout=30)
-        timeframe = "1 Hour"
+        timeframe = "5 Minutes"
     except Exception as e:
-        print(f"Error while getting data for {tick} 1-hour klines: {e}")
+        print(f"Error while getting data for {tick} 5 minutes klines: {e}")
         return None, None
 
     return klines, timeframe
