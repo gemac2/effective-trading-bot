@@ -1,0 +1,7 @@
+python-binance
+ta
+pandas
+requests
+aiohttp
+backoff
+python-dotenv

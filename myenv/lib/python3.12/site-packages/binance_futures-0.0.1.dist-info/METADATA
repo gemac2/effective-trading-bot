@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: binance-futures
+Version: 0.0.1
+Summary: UNKNOWN
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Platform: UNKNOWN
+Requires-Dist: requests
+Requires-Dist: apscheduler
+Requires-Dist: websocket-client
+Requires-Dist: urllib3
+Requires-Dist: tzlocal (<3.0)
+
+UNKNOWN
+
+
